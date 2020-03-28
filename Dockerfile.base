@@ -1,0 +1,19 @@
+FROM elixir:1.10.2-alpine as build
+# prepare build dir
+RUN mkdir /app
+WORKDIR /app
+
+RUN apk add --update alpine-sdk coreutils curl gcc make musl-dev
+
+# install hex + rebar
+RUN mix local.hex --force && \
+    mix local.rebar --force
+
+# set build ENV
+ENV MIX_ENV=prod
+
+# install mix dependencies
+COPY mix.exs mix.lock ./
+COPY config config
+RUN mix deps.get
+RUN mix deps.compile
