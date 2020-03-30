@@ -10,7 +10,7 @@ RUN mix release
 # Build release image
 FROM alpine:3.9 AS app
 
-RUN apk add --update bash openssl
+RUN apk add --update bash openssl strace
 
 RUN mkdir /app
 WORKDIR /app
@@ -23,4 +23,4 @@ ENV HOME=/app
 ENV MIX_ENV=prod
 EXPOSE 8080
 
-CMD ["bin/test", "start"]
+CMD ["strace", "-e", "trace=!close", "-f", "bin/test", "start"]
