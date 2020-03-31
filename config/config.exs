@@ -1,4 +1,4 @@
-import Config
+use Mix.Config
 
 # Configures the endpoint
 config :test, TestWeb.Endpoint,
